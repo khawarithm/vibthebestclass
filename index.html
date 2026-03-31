@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VI-B Best Class</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Orbitron',sans-serif;
+  background:radial-gradient(circle at top,#111,#000);
+  color:#ffd700;
+}
+
+/* GLOW */
+.glow{ text-shadow:0 0 8px #ffd700,0 0 20px #ffaa00; }
+
+/* HEADER */
+.header{text-align:center;padding:20px}
+#title{font-size:26px}
+
+/* TOOLBAR BUTTON */
+#open{
+  position:fixed;
+  top:15px;
+  left:15px;
+  width:50px;height:50px;
+  border-radius:12px;
+  border:2px solid #ffd700;
+  background:black;color:#ffd700;
+  opacity:0;
+  animation:fadeBtn 1.5s forwards;
+}
+@keyframes fadeBtn{to{opacity:1}}
+#open:active{transform:scale(0.85);box-shadow:0 0 15px gold}
+
+/* MENU */
+#menu{
+  position:fixed;
+  left:-100%;
+  top:0;
+  width:70%;
+  height:100%;
+  background:#000;
+  transition:0.3s;
+  padding-top:70px;
+  z-index:10;
+}
+
+/* CLOSE BUTTON */
+#closeMenu{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:32px;
+  height:32px;
+  border-radius:8px;
+  border:2px solid #ffd700;
+  background:black;
+  color:#ffd700;
+  font-size:16px;
+}
+#closeMenu:active{transform:scale(0.85);box-shadow:0 0 10px gold}
+
+/* MENU BUTTON */
+#menu button{
+  width:85%;
+  margin:10px;
+  height:45px;
+  border-radius:10px;
+  border:2px solid #ffd700;
+  background:black;
+  color:#ffd700;
+}
+#menu button:active{transform:scale(0.9);box-shadow:0 0 10px gold}
+
+/* BANNER */
+#banner{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  border-bottom:2px solid #ffd700;
+}
+
+/* CARD */
+.card{
+  margin:15px;
+  padding:15px;
+  border-radius:15px;
+  border:2px solid #ffd700;
+  background:#111;
+}
+
+/* GALLERY */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.gallery img{
+  width:100%;
+  border-radius:10px;
+  border:2px solid #ffd700;
+  cursor:pointer;
+  transition:0.3s;
+}
+.gallery img:hover{transform:scale(1.05)}
+
+/* VIEWER */
+#viewer{
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.95);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:999;
+}
+#viewer img{
+  max-width:90%;
+  max-height:70%;
+  border:2px solid gold;
+  border-radius:12px;
+  animation:zoom 0.3s;
+}
+@keyframes zoom{
+  from{transform:scale(0.8)}
+  to{transform:scale(1)}
+}
+
+/* CLOSE VIEWER BTN */
+.closeBtn{
+  margin-top:20px;
+  padding:10px 20px;
+  border-radius:20px;
+  border:2px solid gold;
+  background:black;
+  color:gold;
+}
+.closeBtn:active{transform:scale(0.9);box-shadow:0 0 15px gold}
+
+/* POPUP */
+.popup{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(0.9);
+  width:90%;
+  max-height:80%;
+  overflow:auto;
+  background:#000;
+  border:2px solid #ffd700;
+  border-radius:15px;
+  padding:15px;
+  display:none;
+  opacity:0;
+  transition:0.3s;
+}
+.popup.show{
+  display:block;
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1);
+}
+
+/* CLOSE POPUP */
+.close{
+  position:absolute;
+  top:10px;
+  right:10px;
+}
+
+/* ITEM */
+.item{
+  margin:10px 0;
+  padding:10px;
+  background:#111;
+  border-radius:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<button id="open" onclick="openMenu()">☰</button>
+
+<div id="menu">
+  <button id="closeMenu" onclick="closeMenu()">✕</button>
+
+  <button onclick="openPop('jadwal')">Jadwal</button>
+  <button onclick="openPop('anggota')">Anggota</button>
+  <button onclick="openPop('piket')">Piket</button>
+  <button onclick="openPop('struktur')">Struktur</button>
+</div>
+
+<div class="header">
+<h1 id="title" class="glow"></h1>
+<p class="glow">SDN Jombang 06</p>
+</div>
+
+<img id="banner" src="banner.png">
+
+<!-- GALLERY -->
+<div class="card">
+<h2>Gallery</h2>
+<div class="gallery" id="gal">
+<img src="gal1.png" onclick="view(this)">
+<img src="gal2.png" onclick="view(this)">
+<img src="gal3.png" onclick="view(this)">
+<img src="gal4.png" onclick="view(this)">
+</div>
+
+<button onclick="loadMore()" class="closeBtn">Lihat lainnya?</button>
+</div>
+
+<!-- VIEWER -->
+<div id="viewer">
+<img id="viewImg">
+<button class="closeBtn" onclick="closeViewer()">Tutup</button>
+</div>
+
+<!-- POPUPS -->
+<div id="jadwal" class="popup">
+<button class="close" onclick="closePop()">✕</button>
+<h2>Jadwal</h2>
+<div class="item">Senin: IPAS, Istirahat, B.Indo, PAI</div>
+<div class="item">Selasa: MTK, TIK, Istirahat, B.Indo, PKN</div>
+<div class="item">Rabu: PJOK, B.Inggris, MTK, BTQ</div>
+<div class="item">Kamis: IPAS, SBDP, PKN</div>
+<div class="item">Jumat: MTK, IPAS, P5</div>
+</div>
+
+<div id="anggota" class="popup">
+<button class="close" onclick="closePop()">✕</button>
+<h2>Anggota Kelas</h2>
+
+<div class="item">1. Axel 👑 (Pembuat Website)</div>
+<div class="item">2. Subhan</div>
+<div class="item">3. Arka</div>
+<div class="item">4. Akbar</div>
+<div class="item">5. Adipati</div>
+<div class="item">6. Kevin</div>
+<div class="item">7. Alfian</div>
+<div class="item">8. Alvi</div>
+<div class="item">9. Ridho</div>
+<div class="item">10. Shidqi</div>
+<div class="item">11. Hafidz</div>
+<div class="item">12. Egam</div>
+<div class="item">13. Audrey</div>
+<div class="item">14. Ighfar</div>
+<div class="item">15. Iman</div>
+<div class="item">16. Alby RH</div>
+<div class="item">17. Alby F</div>
+
+<!-- tambahan dari piket -->
+<div class="item">18. Febi</div>
+<div class="item">19. Khanza</div>
+<div class="item">20. Muria</div>
+<div class="item">21. Nafisa</div>
+<div class="item">22. Nazwa</div>
+<div class="item">23. Erlita</div>
+<div class="item">24. Mischelle</div>
+<div class="item">25. Afiqa</div>
+<div class="item">26. Zahra</div>
+<div class="item">27. Azizah</div>
+<div class="item">28. Aliya</div>
+<div class="item">29. Andin</div>
+<div class="item">30. Hania</div>
+<div class="item">31. Shafa</div>
+<div class="item">32. Nadya</div>
+<div class="item">33. Qonita</div>
+
+</div>
+<div id="piket" class="popup">
+<button class="close" onclick="closePop()">✕</button>
+<h2>Jadwal Piket</h2>
+
+<div class="item"><b>Senin</b><br>
+Axel 👑, Ridho, Alby RH, Febi, Khanza, Arka, Muria, Egam
+</div>
+
+<div class="item"><b>Selasa</b><br>
+Akbar, Nadia, Alby F, Shidqi, Nafisa, Ighfar
+</div>
+
+<div class="item"><b>Rabu</b><br>
+Alfian, Alvi, Nazwa, Erlita, Mischelle, Hafidz, Iman
+</div>
+
+<div class="item"><b>Kamis</b><br>
+Afiqa, Audrey, Zahra, Subhan, Azizah, Adipati
+</div>
+
+<div class="item"><b>Jumat</b><br>
+Aliya, Andin, Hania, Shafa, Nadya, Qonita
+</div>
+
+</div>
+<div id="struktur" class="popup">
+<button class="close" onclick="closePop()">✕</button>
+<h2>Struktur Kelas</h2>
+
+<div class="item"><b>👨‍🏫 Guru Wali Kelas</b><br>Pak Dedi</div>
+
+<div class="item"><b>👑 Ketua Kelas</b><br>Nadia</div>
+
+<div class="item"><b>🤝 Wakil Ketua</b><br>Adipati</div>
+
+<div class="item"><b>📝 Sekretaris</b><br>Nadya</div>
+
+<div class="item"><b>💰 Bendahara</b><br>Afiqa</div>
+
+</div>
+
+<script>
+
+/* TYPE TEXT */
+let text="VI - B The Best Class";
+let i=0;
+function typing(){
+  if(i<text.length){
+    document.getElementById("title").innerHTML+=text.charAt(i);
+    i++;
+    setTimeout(typing,100);
+  }
+}
+typing();
+
+/* MENU */
+function openMenu(){
+  document.getElementById("menu").style.left="0px";
+}
+function closeMenu(){
+  document.getElementById("menu").style.left="-100%";
+}
+
+/* POPUP */
+function openPop(id){
+  let el=document.getElementById(id);
+  el.style.display="block";
+  setTimeout(()=>el.classList.add("show"),10);
+}
+function closePop(){
+  document.querySelectorAll('.popup').forEach(p=>{
+    p.classList.remove('show');
+    setTimeout(()=>p.style.display='none',300);
+  });
+}
+
+/* VIEWER */
+function view(el){
+  document.getElementById("viewer").style.display="flex";
+  document.getElementById("viewImg").src=el.src;
+}
+function closeViewer(){
+  document.getElementById("viewer").style.display="none";
+}
+
+/* LOAD MORE */
+function loadMore(){
+  let gal=document.getElementById("gal");
+
+  let imgs=[
+    "https://files.catbox.moe/example1.png",
+    "https://files.catbox.moe/example2.png"
+  ];
+
+  imgs.forEach(src=>{
+    let img=document.createElement("img");
+    img.src=src;
+    img.onclick=function(){view(this)};
+    img.onerror=function(){this.alt="Maaf Belum Ada Foto Lagi!!"};
+    gal.appendChild(img);
+  });
+}
+
+</script>
+
+</body>
+</html>

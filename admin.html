@@ -1,0 +1,32 @@
+=========== --><!DOCTYPE html><html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin</title><style>
+body{background:black;color:#ffd700;text-align:center;font-family:Arial}
+input{margin:10px;padding:10px;background:black;border:2px solid #ffd700;color:#ffd700}
+button{padding:10px;border:2px solid #ffd700;background:black;color:#ffd700}
+</style></head>
+<body><h2>Login Admin</h2>
+<input id="user" placeholder="Username"><br>
+<input id="pass" placeholder="Password" type="password"><br>
+<button onclick="login()">Login</button><div id="panel" style="display:none">
+<h2>Upload Gallery (URL Catbox)</h2>
+<input id="url" placeholder="Image URL">
+<button onclick="add()">Tambah</button>
+<div id="list"></div>
+</div><script>
+function login(){
+  if(user.value=="adminclass" && pass.value=="VIBTHEBESTCLASS"){
+    panel.style.display="block";
+  }
+}
+
+function add(){
+  let img=document.createElement('img');
+  img.src=url.value;
+  img.style.width='100px';
+  list.appendChild(img);
+}
+</script></body>
+</html>
