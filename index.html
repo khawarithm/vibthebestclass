@@ -379,6 +379,43 @@ function loadMore(){
     gal.appendChild(img);
   });
 }
+  <!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD6R3lxti-tSCNu6f4YArQEon1qDiJdiD8",
+  authDomain: "class-7f7fe.firebaseapp.com",
+  projectId: "class-7f7fe",
+  storageBucket: "class-7f7fe.firebasestorage.app",
+  messagingSenderId: "707334553404",
+  appId: "1:707334553404:web:ade0826dae479f866ba839"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// LOAD GAMBAR DARI FIREBASE
+async function loadGallery(){
+  const gal = document.getElementById("gal");
+  const querySnapshot = await getDocs(collection(db, "gallery"));
+
+  querySnapshot.forEach((doc) => {
+    let data = doc.data();
+
+    let img = document.createElement("img");
+    img.src = data.url;
+    img.onclick = function(){ view(this) };
+    img.onerror = function(){ this.alt="Gagal load"; };
+
+    gal.appendChild(img);
+  });
+}
+
+// jalanin saat web dibuka
+loadGallery();
+</script>
 
 </script>
 
