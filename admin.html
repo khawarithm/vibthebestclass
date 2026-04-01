@@ -15,18 +15,45 @@ button{padding:10px;border:2px solid #ffd700;background:black;color:#ffd700}
 <input id="url" placeholder="Image URL">
 <button onclick="add()">Tambah</button>
 <div id="list"></div>
-</div><script>
-function login(){
+</div><script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD6R3lxti-tSCNu6f4YArQEon1qDiJdiD8",
+  authDomain: "class-7f7fe.firebaseapp.com",
+  projectId: "class-7f7fe",
+  storageBucket: "class-7f7fe.firebasestorage.app",
+  messagingSenderId: "707334553404",
+  appId: "1:707334553404:web:ade0826dae479f866ba839"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.login = function(){
   if(user.value=="adminclass" && pass.value=="VIBTHEBESTCLASS"){
     panel.style.display="block";
+  } else {
+    alert("Login salah!");
   }
 }
 
-function add(){
+window.add = async function(){
+  if(!url.value) return alert("Isi URL dulu!");
+
+  await addDoc(collection(db, "gallery"), {
+    url: url.value
+  });
+
   let img=document.createElement('img');
   img.src=url.value;
   img.style.width='100px';
   list.appendChild(img);
+
+  url.value="";
+  alert("Berhasil ditambahkan!");
 }
-</script></body>
+</script>
+</body>
 </html>
